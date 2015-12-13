@@ -1,0 +1,16 @@
+{
+  "name": "annalister",
+  "version": "1.0.0",
+  "description": "A website creation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/akademy/annalister.git"
+  },
+  "author": "Matthew Wilcoxson",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/akademy/annalister#readme"
+}
