@@ -12,5 +12,9 @@
   },
   "author": "Matthew Wilcoxson",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/akademy/annalister#readme"
+  "homepage": "https://bitbucket.org/akademy/annalister#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "mongodb": "^2.1.1"
+  }
 }
