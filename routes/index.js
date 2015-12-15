@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var config = require('../lib/config');
+var config = require('../config/config');
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 

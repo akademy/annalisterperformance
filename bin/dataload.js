@@ -1,7 +1,7 @@
 /**
  * Created by matthew on 12/14/15.
  */
-var config = require('../lib/config');
+var config = require('../config/config');
 var request = require('request');
 
 var dataFile = "entity_data.jsonld";
