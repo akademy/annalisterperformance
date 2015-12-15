@@ -1,0 +1,22 @@
+extends layout
+
+block content
+	h1= result["rdfs:label"] || result["foaf:name"] || "No label"
+	h2= result["annal:type_id"]
+
+	p= result["rdfs:comment"]
+
+	each value, name in result["entity:seeAlso_r"]
+		a(href=value["rdfs:seeAlso"])= value["rdfs:seeAlso"]
+		br
+	a(href=result["annalistUrl"])= result["annalistUrl"]
+
+	p
+
+	table
+		each value, name in result
+			tr
+				td
+					strong= name 
+				td= value
+

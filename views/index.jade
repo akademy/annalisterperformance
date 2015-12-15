@@ -1,5 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	h1 Carolin Guitar
+
+	ul
+	each result in results
+		li
+			a(href=result._id) #{result["annal:type_id"] + " - " + (result["rdfs:label"] || result["foaf:name"] || "No label") }
