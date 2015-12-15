@@ -1,20 +1,10 @@
 {
   "name": "annalister",
-  "description": "A test webite",
   "version": "0.0.0",
   "private": true,
-  "main": "app.js",
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@bitbucket.org/akademy/annalister.git"
-  },
-  "author": "Matthew Wilcoxson",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/akademy/annalister#readme",
   "dependencies": {
     "body-parser": "~1.13.2",
     "cookie-parser": "~1.3.5",
@@ -24,6 +14,7 @@
     "kerberos": "0.0.17",
     "mongodb": "^2.1.1",
     "morgan": "~1.6.1",
+    "request": "^2.67.0",
     "serve-favicon": "~2.3.0"
   }
 }

@@ -57,4 +57,6 @@ app.use(function(err, req, res, next) {
 });
 
 
+console.log("Annalist started");
+
 module.exports = app;
