@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 		if (err) {
 			throw err;
 		}
-		db.collection('Carolan').find({}).sort({"annal:type_id":1,"rdfs:label":1}).toArray(function(err, result) {
+		db.collection(config.collection).find({}).sort({"annal:type_id":1,"rdfs:label":1}).toArray(function(err, result) {
 			if (err) {
 				throw err;
 			}
@@ -25,7 +25,7 @@ router.get('/:id', function(req, res, next) {
 		if (err) {
 			throw err;
 		}
-		db.collection('Carolan').find({_id:new mongodb.ObjectId(req.params.id)}).toArray(function(err, results) {
+		db.collection(config.collection).find({_id:new mongodb.ObjectId(req.params.id)}).toArray(function(err, results) {
 			if (err) {
 				throw err;
 			}
