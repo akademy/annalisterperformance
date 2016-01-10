@@ -14,7 +14,7 @@ var MongoClient = require('mongodb').MongoClient;
 //var fileRoot = '/home/annalist/annalist_site/c/Performance_defs/d/';
 //var fileRoot = '/home/matthew/Dropbox/code/IntelliJ/AnnalistPerformance/node_modules/';
 var fileRoot = '/home/matthew/AnnalisterPerformance/temp/data/annalist_site/c/';
-var repoRoot = 'Performance_defs/d/'
+var repoRoot = 'Performance_defs/d/';
 /*
  Connect to database and request filelist in annalist (via apache2 folder view)
  */
@@ -66,27 +66,6 @@ MongoClient.connect( config.local.databaseUrl, function(error, db) {
 	});
 });
 
-
-function jsonldToMongo( collection, dataRoot, dataSub, dataUrls ) {
-
-	dataUrls.forEach(function (dataUrl) {
-
-		var url = dataRoot + dataSub + dataUrl + dataFile;
-
-//      console.log(url);
-
-		request(url, function (error, response, body) {
-
-			if (error) {
-				console.error(error);
-			}
-			else {
-				upsertDocument( body, collection );
-			}
-		});
-	});
-}
-
 function upsertDocument( url, document, collection ) {
 	// TODO: var ok = response.statusCode == 200;
 	var bodyJson = null;
@@ -96,8 +75,6 @@ function upsertDocument( url, document, collection ) {
 		console.error("Malformed JSON");
 	}
 	if (bodyJson) {
-		var annalType = bodyJson["annal:type_id"],
-			annalId = bodyJson["annal:id"];
 
 		bodyJson["databaseInsertDate"] = new Date();
 		bodyJson["annalistUrl"] = url;
