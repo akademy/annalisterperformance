@@ -1,6 +1,7 @@
 var configLocal = require( "./config-local");
 
 module.exports = {
-	local : configLocal
+	local : configLocal,
+    collection : "Performance"
 	// something : else
 };
