@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+	h1
+		if title
+			+property(title)
+		else
+			Unknown performance
+
+	p= "Starts on "
+		time(datetime=startISO)
+			+property(startString)
+
+	p= "Located at "
+		+property(location)
+
+	p= "Featuring "
+		ul
+			each ens in ensembled
+				li
+					+property(ens)
+
+
+	table
+		each value, name in performance
+			tr
+				td
+					strong= name
+				td= value
