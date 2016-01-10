@@ -68,6 +68,7 @@ router.get('/', function(req, res, next) {
 							startString: kv(perf, 'prov:startedAtTime', dateFormat(datetimeStart, "dddd, mmmm dS, yyyy, h:MM:ss TT") ),
 
 							location: kv( place, "rdfs:label" ),
+							location_id: place._id,
 
 							ensembled: ensembleLabels
 						};
@@ -86,12 +87,32 @@ router.get('/place/:_id', function(req, res, next) {
 		}
 
 		db.collection(config.collection)
-			.find( req.params._id )
-			.sort({"prov:starterAtTime":1})
-			.toArray(function(err, performance) {
+			.find( {_id: new mongodb.ObjectId(req.params._id)} )
+			.toArray(function(err, place) {
+
+				place = place[0];
+
+				var seeAlsos = place['entity:seeAlso_r'].map( function ( also ) {
+					console.log(also);
+					console.log(also['rdfs:seeAlso']);
+					return kv( also, "rdfs:seeAlso" );
+				});
+
+				console.log(seeAlsos);
+
+				var render = {
+					place: place,
+
+					title: kv(place, 'rdfs:label'),
+					comment: kv(place, 'rdfs:comment'),
+
+					seeAlso: seeAlsos
+				};
+
+				res.render('perform/place', render);
 
 			});
-
+	});
 });
 
 function kv( obj, key, value ) {

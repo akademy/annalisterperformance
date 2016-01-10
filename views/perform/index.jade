@@ -12,7 +12,8 @@ block content
 			+property(startString)
 
 	p= "Located at "
-		+property(location)
+		a(href="place/" + location_id)
+			+property(location)
 
 	p= "Featuring "
 		ul
