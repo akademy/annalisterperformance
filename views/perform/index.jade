@@ -19,7 +19,8 @@ block content
 		ul
 			each ens in ensembled
 				li
-					+property(ens)
+					a(href="ensemble/" + ens._id)
+						+property(ens)
 
 
 	table

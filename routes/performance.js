@@ -55,7 +55,9 @@ router.get('/', function(req, res, next) {
 						var ensemble = associatedGetByType(associated, "Ensemble");
 
 						var ensembleLabels = ensemble.map( function ( ens ) {
-								return kv( ens, "rdfs:label" );
+							var obj = kv( ens, "rdfs:label" );
+							obj["_id"] = ens._id;
+							return obj;
 						});
 
 						var render = {
@@ -114,6 +116,67 @@ router.get('/place/:_id', function(req, res, next) {
 			});
 	});
 });
+
+router.get('/ensemble/:_id', function(req, res, next) {
+	MongoClient.connect(config.local.databaseUrl, function(err, db) {
+		if (err) {
+			throw err;
+		}
+
+		db.collection(config.collection)
+			.find( {_id: new mongodb.ObjectId(req.params._id)} )
+			.toArray(function(err, ensemble) {
+
+				ensemble = ensemble[0];
+
+				var memberAssociated = [];
+
+				ensemble["crm:P107_has_current_or_former_member"].forEach( function(member) {
+					memberAssociated.push( member["@id"] );
+				} );
+
+				var finds = associatedMakeFind( memberAssociated );
+
+				db.collection(config.collection)
+					.find({
+						$or: finds
+					})
+					.toArray(function(err, associated) {
+
+						var members = associatedGetByType(associated, "Musician" );
+
+						var memberLabels = members.map( function ( ens ) {
+							var obj = kv( ens, "rdfs:label" );
+							obj["_id"] = ens._id;
+							return obj;
+						});
+
+						var seeAlsos = ensemble['entity:seeAlso_r'].map(function (also) {
+							console.log(also);
+							console.log(also['rdfs:seeAlso']);
+							return kv(also, "rdfs:seeAlso");
+						});
+
+						console.log(seeAlsos);
+
+						var render = {
+							place: ensemble,
+
+							title: kv(ensemble, 'rdfs:label'),
+							comment: kv(ensemble, 'rdfs:comment'),
+
+							members: memberLabels,
+
+							seeAlso: seeAlsos
+						};
+
+						res.render('perform/ensemble', render);
+					})
+
+			});
+	});
+});
+
 
 function kv( obj, key, value ) {
 	return { k: key, v: (value !== undefined) ? value : obj[key] };
