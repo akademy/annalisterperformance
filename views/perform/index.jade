@@ -1,32 +1,56 @@
 extends ../layout
 
 block content
-	h1
-		if title
-			+property(title)
-		else
-			Unknown performance
+	div#home
 
-	p= "Starts on "
-		time(datetime=startISO)
-			+property(startString)
+		div#title
+			div.sticker Upcoming!
+			h1
+				if title
+					+property(title)
+				else
+					Unknown performance
 
-	p= "Located at "
-		a(href="place/" + location_id)
-			+property(location)
+			#clockdiv
+				div
+					span.days
+					div.smalltext Days
+				div
+					span.hours
+					div.smalltext Hours
+				div
+					span.minutes
+					div.smalltext Minutes
+				div
+					span.seconds
+					div.smalltext Seconds
 
-	p= "Featuring "
-	ul
-		each ens in ensembled
-			li
-				a(href="ensemble/" + ens._id)
-					+property(ens)
+		div#data
+			p.start
+				time(datetime=startISO)
+					+property(startString)
 
-	| <!--
-	table
-		each value, name in performance
-			tr
-				td
-					strong= name
-				td= value
-	| -->
+			p= "@ "
+				a(href="place/" + location_id)
+					+property(location)
+
+			div.featuring
+				p= "Featuring"
+				ul
+					each ens in ensembled
+						li
+							a(href="ensemble/" + ens._id)
+								+property(ens)
+
+			| <!--
+			table
+				each value, name in performance
+					tr
+						td
+							strong= name
+						td= value
+			| -->
+
+	script(src="/javascript/countdown.js")
+	script.
+		initializeClock('clockdiv', new Date("#{startISO}"));

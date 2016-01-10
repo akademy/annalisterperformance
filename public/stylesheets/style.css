@@ -1,11 +1,93 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+  color: #00816A;
 }
+
+a:hover {
+    color: #44aadd;
+    transform: scale(1.2);
+}
+
+html,
+body {
+    margin:0;
+    padding:0;
+    height:100%;
+}
+#container {
+    min-height:100%;
+    position:relative;
+}
+#header {
+    -background:#ff0;
+    padding:10px;
+}
+#body {
+    padding:10px;
+    padding-bottom:30px;   /* Height of the footer */
+    margin: auto;
+    width: 700px;
+    border: 3px solid #666;
+    border-radius: 40px;
+}
+#footer {
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:30px;   /* Height of the footer */
+    -background:#6cf;
+}
+
+#footer p {
+    text-align:center;
+    padding:0;
+    margin:0;
+}
+
+#footer p a {
+    margin: 0 10px;
+    display: inline-block;
+    color: #888;
+    text-decoration: none;
+}
+
+
+#title, #data {
+    display: inline-block;
+    -height: 150px;
+    width: 300px;
+    text-align: center;
+    vertical-align: top;
+    padding: 0;
+}
+#title {
+    padding: 10px 20px 0 50px
+}
+#data {
+    font-size: 20px;
+}
+
+.featuring p {
+    margin-bottom: 0;
+}
+.featuring ul {
+    margin-top: 0;
+    padding:0;
+}
+.featuring li {
+    list-style: none;
+    margin: 14px 0;
+    font-size: larger;
+}
+
+.featuring a {
+    text-decoration: none;
+}
+
+
 
 .iframe-wrap,
 .iframe-wrap a {
@@ -42,4 +124,42 @@ a {
 
 #seealso li span {
     display: none;
+}
+
+.sticker {
+    transform: rotate(-15deg);
+    padding: 5px 25px;
+    position: absolute;
+    margin: -10px -32px;
+    font-weight: bold;
+    color: red;
+    font-size: 20px;
+}
+
+#clockdiv{
+    font-family: sans-serif;
+    color: #000;
+    display: inline-block;
+    font-weight: 100;
+    text-align: center;
+    font-size: 30px;
+}
+
+#clockdiv > div{
+    padding: 0 4px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+#clockdiv div > span{
+    padding: 15px;
+    border-radius: 3px;
+    background: #00816A;
+    display: inline-block;
+    color:white;
+}
+
+.smalltext{
+    padding-top: 5px;
+    font-size: 16px;
 }

@@ -68,7 +68,7 @@ router.get('/', function(req, res, next) {
 							title: kv(perf, 'rdfs:label'),
 
 							startISO: datetimeStart.toISOString(),
-							startString: kv(perf, 'prov:startedAtTime', dateFormat(datetimeStart, "dddd, mmmm dS, yyyy, h:MM:ss TT") ),
+							startString: kv(perf, 'prov:startedAtTime', dateFormat(datetimeStart, "dddd, mmmm dS, h:MMTT") ),
 
 							location: kv( place, "rdfs:label" ),
 							location_id: place._id,

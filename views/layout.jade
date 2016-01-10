@@ -6,5 +6,13 @@ html
 		title= pagetitle
 		link(rel='stylesheet', href='/stylesheets/style.css')
 	body
-		block content
+		#header
+			| Performances
 
+		#body
+			block content
+
+		#footer
+			p
+				a(href="/about") About
+				a(href="") Feedback
