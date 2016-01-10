@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 			if (err) {
 				throw err;
 			}
-			res.render('index', { title: 'Express', results: result });
+			res.render('data/index', { title: 'Express', results: result });
 		});
 	});
 });
@@ -30,10 +30,10 @@ router.get('/:id', function(req, res, next) {
 				throw err;
 			}
 			if( results.length > 0 ) {
-				res.render('item', { found: true, result: results[0] } );
+				res.render('data/item', { found: true, result: results[0] } );
 			}
 			else {
-				res.render('item', {found:false, result:null} );
+				res.render('data/item', {found:false, result:null} );
 			}
 		});
 	});
