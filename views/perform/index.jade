@@ -16,16 +16,17 @@ block content
 			+property(location)
 
 	p= "Featuring "
-		ul
-			each ens in ensembled
-				li
-					a(href="ensemble/" + ens._id)
-						+property(ens)
+	ul
+		each ens in ensembled
+			li
+				a(href="ensemble/" + ens._id)
+					+property(ens)
 
-
+	| <!--
 	table
 		each value, name in performance
 			tr
 				td
 					strong= name
 				td= value
+	| -->

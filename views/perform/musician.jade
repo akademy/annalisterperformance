@@ -1,24 +1,23 @@
 extends ../layout
-
 block content
 	h1
 		if title
 			+property(title)
 		else
 			Unknown performance
-
 	p
 		+property(comment)
 
 	p
-		ul
-			each also in seeAlso
-				li
-					iframe(src=also.v,width=200,height=150)
-					a(href=also.v)
-						+property(also)
+	ul
+		each also in seeAlso
+			li
+				iframe(src=also.v,width=200,height=100)
+				a(href=also.v)
+					+property(also)
 
 	| <!--
+
 	table
 		each value, name in place
 			tr

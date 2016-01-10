@@ -117,6 +117,41 @@ router.get('/place/:_id', function(req, res, next) {
 	});
 });
 
+router.get('/musician/:_id', function(req, res, next) {
+	MongoClient.connect(config.local.databaseUrl, function(err, db) {
+		if (err) {
+			throw err;
+		}
+
+		db.collection(config.collection)
+			.find( {_id: new mongodb.ObjectId(req.params._id)} )
+			.toArray(function(err, musician) {
+
+				musician = musician[0];
+
+				var seeAlsos = musician['entity:seeAlso_r'].map( function ( also ) {
+					console.log(also);
+					console.log(also['rdfs:seeAlso']);
+					return kv( also, "rdfs:seeAlso" );
+				});
+
+				console.log(seeAlsos);
+
+				var render = {
+					place: musician,
+
+					title: kv(musician, 'rdfs:label'),
+					comment: kv(musician, 'rdfs:comment'),
+
+					seeAlso: seeAlsos
+				};
+
+				res.render('perform/musician', render);
+
+			});
+	});
+});
+
 router.get('/ensemble/:_id', function(req, res, next) {
 	MongoClient.connect(config.local.databaseUrl, function(err, db) {
 		if (err) {
