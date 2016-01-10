@@ -10,6 +10,7 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 
 var dateFormat = require('dateformat');
+var url = require('url');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -95,9 +96,9 @@ router.get('/place/:_id', function(req, res, next) {
 				place = place[0];
 
 				var seeAlsos = place['entity:seeAlso_r'].map( function ( also ) {
-					console.log(also);
-					console.log(also['rdfs:seeAlso']);
-					return kv( also, "rdfs:seeAlso" );
+					var obj = kv( also, "rdfs:seeAlso" );
+					obj.name = getUrlDisplayName(obj.v);
+					return obj;
 				});
 
 				console.log(seeAlsos);
@@ -130,9 +131,9 @@ router.get('/musician/:_id', function(req, res, next) {
 				musician = musician[0];
 
 				var seeAlsos = musician['entity:seeAlso_r'].map( function ( also ) {
-					console.log(also);
-					console.log(also['rdfs:seeAlso']);
-					return kv( also, "rdfs:seeAlso" );
+					var obj = kv( also, "rdfs:seeAlso" );
+					obj.name = getUrlDisplayName(obj.v);
+					return obj;
 				});
 
 				console.log(seeAlsos);
@@ -187,9 +188,9 @@ router.get('/ensemble/:_id', function(req, res, next) {
 						});
 
 						var seeAlsos = ensemble['entity:seeAlso_r'].map(function (also) {
-							console.log(also);
-							console.log(also['rdfs:seeAlso']);
-							return kv(also, "rdfs:seeAlso");
+							var obj = kv( also, "rdfs:seeAlso" );
+							obj.name = getUrlDisplayName(obj.v);
+							return obj;
 						});
 
 						console.log(seeAlsos);
@@ -215,6 +216,10 @@ router.get('/ensemble/:_id', function(req, res, next) {
 
 function kv( obj, key, value ) {
 	return { k: key, v: (value !== undefined) ? value : obj[key] };
+}
+
+function getUrlDisplayName( fullUrl ) {
+	return url.parse(fullUrl).hostname.replace("www.","");
 }
 
 function associatedGetByType( associated, type ) {

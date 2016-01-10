@@ -10,13 +10,14 @@ block content
 	p
 		+property(comment)
 
-	p
-		ul
-			each also in seeAlso
-				li
-					iframe(src=also.v,width=200,height=150)
-					a(href=also.v)
-						+property(also)
+	p External links:
+	ul#seealso
+		each also in seeAlso
+			li
+				div.iframe-wrap
+					iframe(src=also.v,seamless="seamless",scrolling="no",style="width:1010px;height:685px;transform: scale(0.2);")
+					a(href=also.v) #{also.name}
+					+property(also)
 
 	| <!--
 	table
