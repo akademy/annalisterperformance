@@ -1,5 +1,6 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: #ddd;
 }
 
 a {
@@ -24,14 +25,19 @@ body {
 #header {
     -background:#ff0;
     padding:10px;
+    background-color: #B5C0D4;
 }
 #body {
     padding:10px;
     padding-bottom:30px;   /* Height of the footer */
-    margin: auto;
+    margin: 45px auto;
     width: 700px;
     border: 3px solid #666;
-    border-radius: 40px;
+    border-radius: 17px;
+    background-color: rgb(229, 229, 229);
+}
+#body:hover {
+    background-color: rgb(235, 235, 235);
 }
 #footer {
     position:absolute;
