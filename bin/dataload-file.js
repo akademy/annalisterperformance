@@ -62,7 +62,7 @@ MongoClient.connect( config.local.databaseUrl, function(error, db) {
 			}
 		});
 
-		//todo : FIX THIS! db.close(); -- I need to rewrite it ...
+		//todo : FIX THIS! db.close(); -- I need to rewrite it so that is closes after it's imported it...
 	});
 });
 
@@ -75,6 +75,8 @@ function upsertDocument( url, document, collection ) {
 		console.error("Malformed JSON");
 	}
 	if (bodyJson) {
+
+        // TODO: Convert dates in JSON to actual Date()...
 
 		bodyJson["databaseInsertDate"] = new Date();
 		bodyJson["annalistUrl"] = url;
