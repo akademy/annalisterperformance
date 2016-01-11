@@ -18,7 +18,7 @@ router.use('/:performId/', routePerformance ); // Pass anything with an id.
 
 
 router.get('/', function(req, res, next) {
-    res.send('Home');
+    res.redirect('/carminalangran/');
 });
 
 
