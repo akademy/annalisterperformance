@@ -18,6 +18,10 @@ body {
     padding:0;
     height:100%;
 }
+body {
+    background-image: url("/images/8274599246_ca631f10dd_m.jpg");
+    background-size: cover;
+}
 #container {
     min-height:100%;
     position:relative;
