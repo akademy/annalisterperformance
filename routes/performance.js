@@ -10,9 +10,10 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 
 var dateFormat = require('dateformat');
+var dateUtils = require('date-utils');
 var url = require('url');
 
-/* GET users listing. */
+
 router.get('/', function(req, res, next) {
 
 	MongoClient.connect(config.local.databaseUrl, function(err, db) {
@@ -20,10 +21,16 @@ router.get('/', function(req, res, next) {
 			throw err;
 		}
 
+		var dateFrom = new Date().remove({weeks:1}).toISOString();
+		console.log( dateFrom );
+
 		db.collection(config.collection)
 			.find({
 				"annal:type_id" : "Performance",
-				"prov:startedAtTime" : { "$gt" : new Date().toISOString() }
+				"prov:startedAtTime" : {
+					// Greater than today plus one week
+					"$gt" : dateFrom
+				}
 			})
 			.sort({"prov:starterAtTime":1})
 			.toArray(function(err, performance) {
@@ -31,57 +38,67 @@ router.get('/', function(req, res, next) {
 				if (err) {
 					throw err;
 				}
-				var perf = performance[0];
-				//console.log( performance );
 
-				var neededAssociated = [
-					perf["crm:P7_took_place_at"]
-				];
+				if( performance.length == 0 ) {
+					// There is no upcoming
+				}
 
-				perf["prov:qualifiedAssociation"].forEach( function(qualifiedAssociation) {
-					neededAssociated.push( qualifiedAssociation["crm:P12i_was_present_at"] );
-				} );
-
-				var finds = associatedMakeFind( neededAssociated );
-
-				db.collection(config.collection)
-					.find({
-						$or: finds
-					})
-					.toArray(function ( err, associated ) {
-
-						var datetimeStart = new Date(perf['prov:startedAtTime']);
-
-						var place = associatedGetByType(associated, "Place")[0];
-						var ensemble = associatedGetByType(associated, "Ensemble");
-
-						var ensembleLabels = ensemble.map( function ( ens ) {
-							var obj = kv( ens, "rdfs:label" );
-							obj["_id"] = ens._id;
-							return obj;
-						});
-
-						var render = {
-							pagetitle: "Performance",
-
-							performance: perf,
-							title: kv(perf, 'rdfs:label'),
-
-							startISO: datetimeStart.toISOString(),
-							startString: kv(perf, 'prov:startedAtTime', dateFormat(datetimeStart, "dddd, mmmm dS, h:MMTT") ),
-
-							location: kv( place, "rdfs:label" ),
-							location_id: place._id,
-
-							ensembled: ensembleLabels
-						};
-
-						res.render('perform/index', render);
-					});
+				nextPerformance( db, performance, res )
 
 			})
 	});
 });
+
+function nextPerformance( db, performance, res ) {
+
+	var perf = performance[0];
+	//console.log( performance );
+
+	var neededAssociated = [
+		perf["crm:P7_took_place_at"]
+	];
+
+	perf["prov:qualifiedAssociation"].forEach( function(qualifiedAssociation) {
+		neededAssociated.push( qualifiedAssociation["crm:P12i_was_present_at"] );
+	} );
+
+	var finds = associatedMakeFind( neededAssociated );
+
+	db.collection(config.collection)
+		.find({
+			$or: finds
+		})
+		.toArray(function ( err, associated ) {
+
+			var datetimeStart = new Date(perf['prov:startedAtTime']);
+
+			var place = associatedGetByType(associated, "Place")[0];
+			var ensemble = associatedGetByType(associated, "Ensemble");
+
+			var ensembleLabels = ensemble.map( function ( ens ) {
+				var obj = kv( ens, "rdfs:label" );
+				obj["_id"] = ens._id;
+				return obj;
+			});
+
+			var render = {
+				pagetitle: "Performance",
+
+				performance: perf,
+				title: kv(perf, 'rdfs:label'),
+
+				startISO: datetimeStart.toISOString(),
+				startString: kv(perf, 'prov:startedAtTime', dateFormat(datetimeStart, "dddd, mmmm dS, h:MMTT") ),
+
+				location: kv( place, "rdfs:label" ),
+				location_id: place._id,
+
+				ensembled: ensembleLabels
+			};
+
+			res.render('perform/index', render);
+		});
+}
 
 router.get('/place/:_id', function(req, res, next) {
 	MongoClient.connect(config.local.databaseUrl, function(err, db) {
