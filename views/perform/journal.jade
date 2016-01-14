@@ -1,0 +1,27 @@
+extends ../layout
+block content
+	h1
+		if title
+			+property(title)
+		else
+			Unknown Journal
+	p
+		+property(comment)
+
+	if seeAlso
+		p External links:
+		ul#seealso
+			each also in seeAlso
+				li
+					div.iframe-wrap
+						iframe(src=also.v,seamless="seamless",scrolling="no",style="width:1010px;height:685px;transform: scale(0.2);")
+						a(href=also.v) #{also.name}
+						+property(also)
+	| <!--
+	table
+		each value, name in place
+			tr
+				td
+					strong= name
+				td= value
+	| -->
