@@ -4,15 +4,14 @@
 var express = require('express');
 var router = express.Router( {mergeParams: true} );
 
-var config = require('../config/config');
-
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 
 var dateFormat = require('dateformat');
 var dateUtils = require('date-utils');
-var url = require('url');
 
+var config = require('../config/config');
+var helper = require('./helper')
 
 router.get('/', function(req, res, next) {
 
@@ -113,7 +112,7 @@ function getPerformanceRelated( perf, db, useFunction ) {
 			neededAssociated.push( qualifiedAssociation["crm:P12i_was_present_at"] );
 		} );
 
-		var finds = associatedMakeFind( neededAssociated );
+		var finds = helper.associatedMakeFind( neededAssociated );
 
 		db.collection(config.collection)
 			.find({
@@ -147,8 +146,8 @@ function futurePerformance( perf, associated, res, timeFrame ) {
 	if( perf ) {
 		var datetimeStart = new Date(perf['prov:startedAtTime']);
 
-		var place = associatedGetByType(associated, "Place")[0];
-		var ensemble = associatedGetByType(associated, "Ensemble");
+		var place = helper.associatedGetByType(associated, "Place")[0];
+		var ensemble = helper.associatedGetByType(associated, "Ensemble");
 
 		var ensembleLabels = ensemble.map(function (ens) {
 			var obj = kv(ens, "rdfs:label");
@@ -176,7 +175,7 @@ function futurePerformance( perf, associated, res, timeFrame ) {
 
 		render = {
 			pagetitle: "Performance",
-			performance: null,
+			performance: null
 		};
 	}
 
@@ -197,7 +196,7 @@ router.get('/place/:_id', function(req, res, next) {
 
 				var seeAlsos = place['entity:seeAlso_r'].map( function ( also ) {
 					var obj = kv( also, "rdfs:seeAlso" );
-					obj.name = getUrlDisplayName(obj.v);
+					obj.name = helper.getUrlDisplayName(obj.v);
 					return obj;
 				});
 
@@ -232,7 +231,7 @@ router.get('/musician/:_id', function(req, res, next) {
 
 				var seeAlsos = musician['entity:seeAlso_r'].map( function ( also ) {
 					var obj = kv( also, "rdfs:seeAlso" );
-					obj.name = getUrlDisplayName(obj.v);
+					obj.name = helper.getUrlDisplayName(obj.v);
 					return obj;
 				});
 
@@ -271,7 +270,7 @@ router.get('/ensemble/:_id', function(req, res, next) {
 					memberAssociated.push( member["@id"] );
 				} );
 
-				var finds = associatedMakeFind( memberAssociated );
+				var finds = helper.associatedMakeFind( memberAssociated );
 
 				db.collection(config.collection)
 					.find({
@@ -279,7 +278,7 @@ router.get('/ensemble/:_id', function(req, res, next) {
 					})
 					.toArray(function(err, associated) {
 
-						var members = associatedGetByType(associated, "Musician" );
+						var members = helper.associatedGetByType(associated, "Musician" );
 
 						var memberLabels = members.map( function ( ens ) {
 							var obj = kv( ens, "rdfs:label" );
@@ -289,7 +288,7 @@ router.get('/ensemble/:_id', function(req, res, next) {
 
 						var seeAlsos = ensemble['entity:seeAlso_r'].map(function (also) {
 							var obj = kv( also, "rdfs:seeAlso" );
-							obj.name = getUrlDisplayName(obj.v);
+							obj.name = helper.getUrlDisplayName(obj.v);
 							return obj;
 						});
 
@@ -316,32 +315,6 @@ router.get('/ensemble/:_id', function(req, res, next) {
 
 function kv( obj, key, value ) {
 	return { k: key, v: (value !== undefined) ? value : obj[key] };
-}
-
-function getUrlDisplayName( fullUrl ) {
-	return url.parse(fullUrl).hostname.replace("www.","");
-}
-
-function associatedGetByType( associated, type ) {
-
-	return associated.filter( function( assoc ) {
-		return assoc['annal:type_id'] === type;
-	} )
-}
-
-function associatedMakeFind( keys ) {
-	var associatedFind = [];
-
-	keys.forEach( function( key ) {
-		var props = key.split("/");
-
-		associatedFind.push( {
-			"annal:type_id" : props[0],
-			"annal:id" : props[1]
-		})
-	} );
-
-	return associatedFind;
 }
 
 module.exports = router;

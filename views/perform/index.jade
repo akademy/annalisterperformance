@@ -66,6 +66,10 @@ block content
 							td= value
 				| -->
 
+			p(style="text-align:center")
+				a(href="/type/performance/" + performance._id)
+					| see more...
+
 		script(src="/javascript/countdown.js")
 		script.
 			initializeClock('clockdiv', new Date("#{startISO}"), function() {
