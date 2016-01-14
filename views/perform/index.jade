@@ -1,56 +1,76 @@
 extends ../layout
 
 block content
-	div#home
 
-		div#title
-			div.sticker Upcoming!
-			h1
-				if title
-					+property(title)
-				else
-					Unknown performance
+	if performance
+		div#home
 
-			#clockdiv
-				div
-					span.days
-					div.smalltext Days
-				div
-					span.hours
-					div.smalltext Hours
-				div
-					span.minutes
-					div.smalltext Minutes
-				div
-					span.seconds
-					div.smalltext Seconds
+			div#title
+				if timeFrame == "future"
+					div.sticker Upcoming!
 
-		div#data
-			p.start
-				time(datetime=startISO)
-					+property(startString)
+				h1
+					if title
+						+property(title)
+					else
+						Unknown performance
 
-			p= "@ "
-				a(href="place/" + location_id)
-					+property(location)
+				if timeFrame == "future"
+					#clockdiv
+						// Countdown
+						div
+							span.days
+							div.smalltext Days
+						div
+							span.hours
+							div.smalltext Hours
+						div
+							span.minutes
+							div.smalltext Minutes
+						div
+							span.seconds
+							div.smalltext Seconds
 
-			div.featuring
-				p= "Featuring"
-				ul
-					each ens in ensembled
-						li
-							a(href="ensemble/" + ens._id)
-								+property(ens)
+				else if timeFrame == "present"
+					h2(style="color:#e00") It's happening now!
+					p Tell is what you think, or upload an image.
 
-			| <!--
-			table
-				each value, name in performance
-					tr
-						td
-							strong= name
-						td= value
-			| -->
+				else if timeFrame == "past"
+					h2(style="color:#e00") It's over now!
+					p Take a look at the memories from this performance.
 
-	script(src="/javascript/countdown.js")
-	script.
-		initializeClock('clockdiv', new Date("#{startISO}"));
+			div#data
+				p.start
+					//- TODO: I should specify a timezone...
+					time(datetime=startISO)
+						+property(startString)
+
+				p= "@ "
+					a(href="place/" + location_id)
+						+property(location)
+
+				div.featuring
+					p= "Featuring"
+					ul
+						each ens in ensembled
+							li
+								a(href="ensemble/" + ens._id)
+									+property(ens)
+
+				| <!--
+				table
+					each value, name in performance
+						tr
+							td
+								strong= name
+							td= value
+				| -->
+
+		script(src="/javascript/countdown.js")
+		script.
+			initializeClock('clockdiv', new Date("#{startISO}"), function() {
+				location.reload();
+			});
+
+	else
+		h1(style="color:#e00;text-align:center") No performances available.

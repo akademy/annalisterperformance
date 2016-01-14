@@ -21,83 +21,166 @@ router.get('/', function(req, res, next) {
 			throw err;
 		}
 
-		var dateFrom = new Date().remove({weeks:1}).toISOString();
-		console.log( dateFrom );
+		var defaultDuration = {hours:3};
+
+		/*
+			We need to handle several scenarios:
+			- The next performance.
+			- The performance happening now.
+			- The previous performance.
+			- No performace.
+		 */
+
+		var now = new Date();
+		//var now = new Date("2016-01-17T20:01:00.000Z");
+		//var now = new Date("2017-01-17T20:01:00.000Z");
+
+		var dateFrom = now.clone().remove({weeks:1});
 
 		db.collection(config.collection)
 			.find({
 				"annal:type_id" : "Performance",
 				"prov:startedAtTime" : {
-					// Greater than today plus one week
-					"$gt" : dateFrom
+					// Starting after a week ago.
+					"$gt" : dateFrom.toISOString()
 				}
 			})
 			.sort({"prov:starterAtTime":1})
-			.toArray(function(err, performance) {
+			.limit(5)
+			.toArray(function(err, performances) {
 
 				if (err) {
 					throw err;
 				}
 
-				if( performance.length == 0 ) {
-					// There is no upcoming
+				if( performances.length == 0 ) {
+					// There is no upcoming performances and has been none in the last week.
+					// Get a previous performance
+
+					db.collection(config.collection)
+						.find({
+							"annal:type_id" : "Performance",
+							"prov:startedAtTime" : {
+								// Less than today
+								"$lt" : now.toISOString()
+							}
+						})
+						.sort({"prov:starterAtTime":-1})
+						.toArray(function(err, performances) {
+							var perf = null;
+							if( performances ) {
+								perf = performances[0];
+							}
+							getPerformanceRelated( perf, db, function(err, associated ) {
+								pastPerformance( perf, associated, res);
+							});
+						});
+				}
+				else {
+
+					var perf = performances[0];
+
+
+					getPerformanceRelated(perf, db, function (err, associated) {
+						var datetimeStart = new Date(perf['prov:startedAtTime']);
+						var datetimeEnd = datetimeStart.clone().add({hours: 3});
+
+						if (datetimeStart.isBefore(now) && datetimeEnd.isAfter(now)) {
+							presentPerformance(perf, associated, res);
+						}
+						else if (datetimeStart.isBefore(now)) {
+							pastPerformance(perf, associated, res);
+						}
+						else {
+							futurePerformance(perf, associated, res);
+						}
+
+					});
 				}
 
-				nextPerformance( db, performance, res )
 
-			})
+			});
 	});
 });
 
-function nextPerformance( db, performance, res ) {
+function getPerformanceRelated( perf, db, useFunction ) {
+	if( perf ) {
+		var neededAssociated = [
+			perf["crm:P7_took_place_at"]
+		];
 
-	var perf = performance[0];
-	//console.log( performance );
+		perf["prov:qualifiedAssociation"].forEach( function(qualifiedAssociation) {
+			neededAssociated.push( qualifiedAssociation["crm:P12i_was_present_at"] );
+		} );
 
-	var neededAssociated = [
-		perf["crm:P7_took_place_at"]
-	];
+		var finds = associatedMakeFind( neededAssociated );
 
-	perf["prov:qualifiedAssociation"].forEach( function(qualifiedAssociation) {
-		neededAssociated.push( qualifiedAssociation["crm:P12i_was_present_at"] );
-	} );
+		db.collection(config.collection)
+			.find({
+				$or: finds
+			})
+			.toArray(function ( err, associated ) {
+				useFunction( err, associated );
+			})
+	}
+	else {
+		useFunction(null,null);
+	}
+}
 
-	var finds = associatedMakeFind( neededAssociated );
 
-	db.collection(config.collection)
-		.find({
-			$or: finds
-		})
-		.toArray(function ( err, associated ) {
+function presentPerformance( perf, associated, res ) {
+	// performances happening right now
+	futurePerformance( perf, associated, res, "present" );
+}
 
-			var datetimeStart = new Date(perf['prov:startedAtTime']);
+function pastPerformance( perf, associated, res ) {
+	// performances finished
+	futurePerformance( perf, associated, res, "past" );
+}
 
-			var place = associatedGetByType(associated, "Place")[0];
-			var ensemble = associatedGetByType(associated, "Ensemble");
+function futurePerformance( perf, associated, res, timeFrame ) {
+	// an upcoming performance.
 
-			var ensembleLabels = ensemble.map( function ( ens ) {
-				var obj = kv( ens, "rdfs:label" );
-				obj["_id"] = ens._id;
-				return obj;
-			});
+	var render;
 
-			var render = {
-				pagetitle: "Performance",
+	if( perf ) {
+		var datetimeStart = new Date(perf['prov:startedAtTime']);
 
-				performance: perf,
-				title: kv(perf, 'rdfs:label'),
+		var place = associatedGetByType(associated, "Place")[0];
+		var ensemble = associatedGetByType(associated, "Ensemble");
 
-				startISO: datetimeStart.toISOString(),
-				startString: kv(perf, 'prov:startedAtTime', dateFormat(datetimeStart, "dddd, mmmm dS, h:MMTT") ),
-
-				location: kv( place, "rdfs:label" ),
-				location_id: place._id,
-
-				ensembled: ensembleLabels
-			};
-
-			res.render('perform/index', render);
+		var ensembleLabels = ensemble.map(function (ens) {
+			var obj = kv(ens, "rdfs:label");
+			obj["_id"] = ens._id;
+			return obj;
 		});
+
+		render = {
+			pagetitle: "Performance",
+
+			performance: perf,
+			title: kv(perf, 'rdfs:label'),
+
+			startISO: datetimeStart.toISOString(),
+			startString: kv(perf, 'prov:startedAtTime', dateFormat(datetimeStart, "dddd, mmmm dS, h:MMTT")),
+			timeFrame: timeFrame || "future",
+
+			location: kv(place, "rdfs:label"),
+			location_id: place._id,
+
+			ensembled: ensembleLabels
+		};
+	}
+	else {
+
+		render = {
+			pagetitle: "Performance",
+			performance: null,
+		};
+	}
+
+	res.render('perform/index', render);
 }
 
 router.get('/place/:_id', function(req, res, next) {

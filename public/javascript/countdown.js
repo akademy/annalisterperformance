@@ -14,12 +14,13 @@ function getTimeRemaining(endtime) {
 	};
 }
 
-function initializeClock(id, endtime) {
+function initializeClock(id, endtime, timerEndFunction ) {
 	var clock = document.getElementById(id),
 		daysSpan = clock.querySelector('.days'),
 		hoursSpan = clock.querySelector('.hours'),
 		minutesSpan = clock.querySelector('.minutes'),
-		secondsSpan = clock.querySelector('.seconds');
+		secondsSpan = clock.querySelector('.seconds'),
+		timeinterval;
 
 	function updateClock() {
 		var t = getTimeRemaining(endtime);
@@ -31,11 +32,14 @@ function initializeClock(id, endtime) {
 
 		if (t.total <= 0) {
 			clearInterval(timeinterval);
+			if( timerEndFunction ) {
+				timerEndFunction();
+			}
 		}
 	}
 
 	updateClock();
-	setInterval(updateClock, 1000);
+	timeinterval = setInterval(updateClock, 1000);
 }
 
 //var deadline = new Date(Date.parse(new Date()) + 15 * 24 * 60 * 60 * 1000);
