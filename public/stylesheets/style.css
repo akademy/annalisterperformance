@@ -12,6 +12,11 @@ a:hover {
     transform: scale(1.2);
 }
 
+p {
+    line-height: 1.5;
+    padding: 0 5px;
+}
+
 html,
 body {
     margin:0;
@@ -21,6 +26,7 @@ body {
 body {
     background-image: url("/images/8274599246_ca631f10dd_m.jpg");
     background-size: cover;
+    background-attachment: fixed;
 }
 #container {
     min-height:100%;
@@ -45,10 +51,9 @@ body {
 }
 #footer {
     position:absolute;
-    bottom:0;
+    -bottom:0;
     width:100%;
     height:30px;   /* Height of the footer */
-    -background:#6cf;
 }
 
 #footer p {
@@ -149,7 +154,7 @@ body {
 #clockdiv{
     font-family: sans-serif;
     color: #000;
-    display: inline-block;
+    display: inlincovere-block;
     font-weight: 100;
     text-align: center;
     font-size: 30px;
