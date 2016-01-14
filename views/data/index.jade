@@ -6,4 +6,4 @@ block content
 	ul
 	each result in results
 		li
-			a(href=result._id) #{result["annal:type_id"] + " - " + (result["rdfs:label"] || result["foaf:name"] || "No label") }
+			a(href="_data/" + result._id) #{result["annal:type_id"] + " - " + (result["rdfs:label"] || result["foaf:name"] || "No label") }
