@@ -4,10 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//var multer  = require('multer');
 
 var routeHome = require('./routes/index');
 var routeData = require('./routes/data');
 var routeTypes = require('./routes/type');
+var routeFeedback = require('./routes/feedback');
 
 var app = express();
 
@@ -20,10 +22,13 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+//app.use( multer({ dest: './public/_feedback/'}));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/_data', routeData);
+app.use('/feedback', routeFeedback);
 app.use('/type/', routeTypes);
 app.use('/', routeHome);
 

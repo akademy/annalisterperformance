@@ -30,3 +30,7 @@ node_modules
 
 # Created by .ignore support plugin (hsz.mobi)
 /config/config-local.js
+
+# Uploads
+public/_feedback/*
+!public/_feedback/.gitkeep

@@ -32,7 +32,7 @@ router.get('/', function(req, res, next) {
 
 		var now = new Date();
 		//var now = new Date("2016-01-17T20:01:00.000Z");
-		//var now = new Date("2017-01-17T20:01:00.000Z");
+		//var now = new Date("2016-01-19T20:01:00.000Z");
 
 		var dateFrom = now.clone().remove({weeks:1});
 

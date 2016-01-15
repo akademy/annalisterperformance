@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var config = require('../config/config');
+
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 
+var config = require('../config/config');
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	MongoClient.connect(config.local.databaseUrl, function(err, db) {
@@ -38,4 +39,5 @@ router.get('/:id', function(req, res, next) {
 		});
 	});
 });
+
 module.exports = router;
