@@ -7,17 +7,19 @@ block content
 		else
 			Unknown performance
 
-	p
-		+property(comment)
+	if comment
+		p
+			+property(comment)
 
-	p External links:
-	ul#seealso
-		each also in seeAlso
-			li
-				div.iframe-wrap
-					iframe(src=also.v,seamless="seamless",scrolling="no",style="width:1010px;height:685px;transform: scale(0.2);")
-					a(href=also.v) #{also.name}
-					+property(also)
+	if seeAlso
+		p External links:
+		ul#seealso
+			each also in seeAlso
+				li
+					div.iframe-wrap
+						iframe(src=also.v,seamless="seamless",scrolling="no",style="width:1010px;height:685px;transform: scale(0.2);")
+						a(href=also.v) #{also.name}
+						+property(also)
 
 	| <!--
 	table

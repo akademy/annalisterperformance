@@ -5,24 +5,28 @@ block content
 			+property(title)
 		else
 			Unknown performance
-	p
-		+property(comment)
 
-	p Members (past and present):
-		ul
-			each member in members
+	if comment
+		p
+			+property(comment)
+
+	if members
+		p Members (past and present):
+			ul
+				each member in members
+					li
+						a(href="../../musician/" + member._id)
+							+property(member)
+
+	if seeAlso
+		p External links:
+		ul#seealso
+			each also in seeAlso
 				li
-					a(href="../../musician/" + member._id)
-						+property(member)
-
-	p External links:
-	ul#seealso
-		each also in seeAlso
-			li
-				div.iframe-wrap
-					iframe(src=also.v,seamless="seamless",scrolling="no",style="width:1010px;height:685px;transform: scale(0.2);")
-					a(href=also.v) #{also.name}
-					+property(also)
+					div.iframe-wrap
+						iframe(src=also.v,seamless="seamless",scrolling="no",style="width:1010px;height:685px;transform: scale(0.2);")
+						a(href=also.v) #{also.name}
+						+property(also)
 
 
 	| <!--
