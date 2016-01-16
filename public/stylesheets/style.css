@@ -37,6 +37,7 @@ body {
     padding:10px;
     background-color: #B5C0D4;
 }
+
 #body {
     padding:10px;
     padding-bottom:30px;   /* Height of the footer */
@@ -70,6 +71,9 @@ body {
     text-decoration: none;
 }
 
+#header a {
+    text-decoration: none;
+}
 
 #title, #data {
     display: inline-block;
