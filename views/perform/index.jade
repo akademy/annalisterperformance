@@ -3,7 +3,7 @@ extends ../layout
 block content
 
 	if performance
-		- timeframe = "past"
+		- timeFrame = "present"
 		div#home
 
 			div#title
@@ -16,33 +16,40 @@ block content
 					else
 						Unknown Performance
 
-				if timeFrame == "future"
-					#clockdiv
-						// Countdown
-						div
-							span.days
-							div.smalltext Days
-						div
-							span.hours
-							div.smalltext Hours
-						div
-							span.minutes
-							div.smalltext Minutes
-						div
-							span.seconds
-							div.smalltext Seconds
+				#timeFrame(class=timeFrame)
+					if timeFrame == "future"
+						#clockdiv
+							// Countdown
+							div
+								span.days
+								div.smalltext Days
+							div
+								span.hours
+								div.smalltext Hours
+							div
+								span.minutes
+								div.smalltext Minutes
+							div
+								span.seconds
+								div.smalltext Seconds
 
-				else if timeFrame == "present"
-					h2(style="color:#e00") It's happening now!
-					p Tell is what you think, or upload an image.
-					p
-						a(href="/feedback/",style="font-size:larger") Tell us now!
+					else if timeFrame == "present"
 
-				else if timeFrame == "past"
-					h2(style="color:#e00") It's over now!
-					p Do you have any feedback?
-						p
-							a(href="/feedback/",style="font-size:larger") Let us know!
+						h2(style="color:#e00") It's happening now!
+
+						.highlight
+							p Tell is what you think, or upload an image.
+							p
+								a(href="/feedback/",style="font-size:larger") Tell us now!
+
+					else if timeFrame == "past"
+
+						h2(style="color:#e00") It's over now!
+
+						.highlight
+							p Do you have any feedback?
+							p
+								a(href="/feedback/",style="font-size:larger") Let us know!
 
 			div#data
 				p.start

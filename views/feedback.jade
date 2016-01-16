@@ -1,28 +1,32 @@
 extends layout
 
 block content
-	h1 Tell us... Show us...
+	#feedback
 
-	h2 What do you think of the performance so far?
+		h1 Tell us... Show us...
 
-	form(action="/feedback/", method="post", enctype="multipart/form-data")
-		div
-			p
-				label Show us:
+		h2 What do you think of the performance so far?
+
+		form(action="/feedback/", method="post", enctype="multipart/form-data")
+			div
+				p
+				label Tell us what you think:
 					br
-					input(type="file", name="feedback_file")
+					textarea(name="feedback_text", rows="4")
 
-			p
-				label Tell us:
-					br
-					input(type="textbox", name="feedback_text")
+				p
+					label Would you like to upload a photo or movie too:
+						br
+						input(type="file", name="feedback_file")
 
-			//p Emotions
-			//	input(type="checkbox", name="emot_happy", value="happy")
-			//	input(type="checkbox", name="emot_sad")
-			//	input(type="checkbox", name="emot_angry")
-			//	input(type="checkbox", name="emot_angry")
 
-			p
-				input(type="submit",value="Send")
+				//p Emotions
+				//	input(type="checkbox", name="emot_happy", value="happy")
+				//	input(type="checkbox", name="emot_sad")
+				//	input(type="checkbox", name="emot_angry")
+				//	input(type="checkbox", name="emot_angry")
+
+				br
+				p
+					input(type="submit",value="Send")
 
