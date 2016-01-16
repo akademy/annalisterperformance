@@ -1,0 +1,28 @@
+extends layout
+
+block content
+	h1 Tell us... Show us...
+
+	h2 What do you think of the performance so far?
+
+	form(action="/feedback/", method="post", enctype="multipart/form-data")
+		div
+			p
+				label Show us:
+					br
+					input(type="file", name="feedback_file")
+
+			p
+				label Tell us:
+					br
+					input(type="textbox", name="feedback_text")
+
+			//p Emotions
+			//	input(type="checkbox", name="emot_happy", value="happy")
+			//	input(type="checkbox", name="emot_sad")
+			//	input(type="checkbox", name="emot_angry")
+			//	input(type="checkbox", name="emot_angry")
+
+			p
+				input(type="submit",value="Send")
+

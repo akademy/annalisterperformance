@@ -5,8 +5,10 @@ block content
 			+property(title)
 		else
 			Unknown Journal
-	p
-		+property(comment)
+
+	if comment
+		p
+			+property(comment)
 
 	if seeAlso
 		p External links:

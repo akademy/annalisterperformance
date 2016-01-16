@@ -13,7 +13,7 @@ block content
 					if title
 						+property(title)
 					else
-						Unknown performance
+						Unknown Performance
 
 				if timeFrame == "future"
 					#clockdiv
@@ -34,10 +34,14 @@ block content
 				else if timeFrame == "present"
 					h2(style="color:#e00") It's happening now!
 					p Tell is what you think, or upload an image.
+					p
+						a(href="/feedback/",style="font-size:larger") Tell us now!
 
 				else if timeFrame == "past"
 					h2(style="color:#e00") It's over now!
-					p Take a look at the memories from this performance.
+					p Do you have any feedback?
+						p
+							a(href="/feedback/",style="font-size:larger") Let us know!
 
 			div#data
 				p.start

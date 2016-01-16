@@ -51,7 +51,7 @@ body {
 }
 #footer {
     position:absolute;
-    -bottom:0;
+    /*bottom:1*/ /* Doesn't stay at bottom on long pages */
     width:100%;
     height:30px;   /* Height of the footer */
 }
