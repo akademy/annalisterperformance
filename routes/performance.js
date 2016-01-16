@@ -11,7 +11,7 @@ var dateFormat = require('dateformat');
 var dateUtils = require('date-utils');
 
 var config = require('../config/config');
-var helper = require('./helper')
+var helper = require('./helper');
 
 router.get('/', function(req, res, next) {
 
