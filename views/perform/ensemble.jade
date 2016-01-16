@@ -11,15 +11,15 @@ block content
 			+property(comment)
 
 	if members
-		p Members (past and present):
-			ul
-				each member in members
-					li
-						a(href="../../musician/" + member._id)
-							+property(member)
+		h2 Members (past and present):
+		ul
+			each member in members
+				li
+					a(href="../../musician/" + member._id)
+						+property(member)
 
 	if seeAlso
-		p External links:
+		h2 External links:
 		ul#seealso
 			each also in seeAlso
 				li
@@ -27,6 +27,13 @@ block content
 						iframe(src=also.v,seamless="seamless",scrolling="no",style="width:1010px;height:685px;transform: scale(0.2);")
 						a(href=also.v) #{also.name}
 						+property(also)
+
+	if images
+		h2 Media:
+		#media
+			each image in images
+				a(href=image)
+					img(src=image, width="200px")
 
 
 	| <!--

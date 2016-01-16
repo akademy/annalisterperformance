@@ -266,9 +266,16 @@ router.get('/ensemble/:_id', function(req, res, next) {
 
 				var memberAssociated = [];
 
-				ensemble["crm:P107_has_current_or_former_member"].forEach( function(member) {
-					memberAssociated.push( member["@id"] );
-				} );
+				ensemble["crm:P107_has_current_or_former_member"].forEach(function (member) {
+					memberAssociated.push(member["@id"]);
+				});
+
+				if( ensemble["coll:images"] ) {
+
+					ensemble["coll:images"].forEach(function (image) {
+						memberAssociated.push(image["coll:Image"]);
+					});
+				}
 
 				var finds = helper.associatedMakeFind( memberAssociated );
 
@@ -279,6 +286,7 @@ router.get('/ensemble/:_id', function(req, res, next) {
 					.toArray(function(err, associated) {
 
 						var members = helper.associatedGetByType(associated, "Musician" );
+						var images = helper.associatedGetByType(associated, "Image" );
 
 						var memberLabels = members.map( function ( ens ) {
 							var obj = kv( ens, "rdfs:label" );
@@ -292,6 +300,13 @@ router.get('/ensemble/:_id', function(req, res, next) {
 							return obj;
 						});
 
+						var imageUrls = images.map( function( image ) {
+							var url = config.local.mediaRoot;
+							url += image.annalistUrl;
+							url += image["coll:image"].resource_name;
+							return url;
+						});
+
 						console.log(seeAlsos);
 
 						var render = {
@@ -300,7 +315,9 @@ router.get('/ensemble/:_id', function(req, res, next) {
 							title: kv(ensemble, 'rdfs:label'),
 							comment: kv(ensemble, 'rdfs:comment'),
 
-							members: memberLabels,
+							members: (ensemble["crm:P107_has_current_or_former_member"]) ? memberLabels : null,
+
+							images : (ensemble["coll:images"]) ? imageUrls : null,
 
 							seeAlso: seeAlsos
 						};
