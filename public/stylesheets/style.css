@@ -49,6 +49,7 @@ body {
 #body:hover {
     background-color: rgb(235, 235, 235);
 }
+
 #footer {
     position:absolute;
     /*bottom:1*/ /* Doesn't stay at bottom on long pages */
@@ -177,4 +178,36 @@ body {
 .smalltext{
     padding-top: 5px;
     font-size: 16px;
+}
+
+@media only screen and (min-width: 480px) and (max-width:767px) {
+    #body {
+        padding: 10px;
+        padding-bottom: 30px; /* Height of the footer */
+        margin: 45px auto;
+        width: 400px;
+    }
+
+    #title, #data {
+        padding: 10px;
+        margin: 0 auto;
+        width: auto;
+        display:block;
+    }
+}
+
+@media only screen and (max-width:479px) {
+    #body {
+        padding: 10px;
+        padding-bottom: 30px; /* Height of the footer */
+        margin: 0;
+        width: auto;
+    }
+
+    #title, #data {
+        padding: 0;
+        margin: 0 auto;
+        width: auto;
+        display:block;
+    }
 }
