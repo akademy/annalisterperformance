@@ -3,9 +3,15 @@ extends layout
 block content
 	#feedback
 
+		if fedBack
+			p.highlight Thanks for your submission at #{time}!
+
+
 		h1 Tell us... Show us...
 
 		h2 What do you think of the performance so far?
+
+		p	It's #{time}
 
 		form(action="/feedback/", method="post", enctype="multipart/form-data")
 			div
@@ -30,3 +36,5 @@ block content
 				p
 					input(type="submit",value="Send")
 
+		p
+			small We'll assume its OK for us to use your submissions for academic music research - and thanks!

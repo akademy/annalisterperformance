@@ -4,6 +4,8 @@ var router = express.Router();
 var multer  = require('multer');
 var upload = multer({ dest: 'public/_feedback/' })
 
+var dateFormat = require('dateformat');
+
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 
@@ -14,7 +16,10 @@ var config = require('../config/config');
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-	res.render('feedback', { uploaded : false } );
+	res.render('feedback', {
+		fedBack : false,
+		time :  dateFormat(new Date(), "dddd, h:MMTT")
+	});
 
 });
 
@@ -25,6 +30,7 @@ router.post( '/', upload.single("feedback_file"), function(req, res, next ){
 		db.createCollection('Feedback', function (err, collection) {
 
 			var obj;
+			var now = new Date();
 
 			if( req.file ) {
 				obj = req.file;
@@ -34,7 +40,7 @@ router.post( '/', upload.single("feedback_file"), function(req, res, next ){
 				obj.type = "Comment"
 			}
 
-			obj.databaseInsertDate = new Date();
+			obj.databaseInsertDate = now;
 			obj.comment = req.body.feedback_text;
 
 			collection.insert(obj,
@@ -44,7 +50,9 @@ router.post( '/', upload.single("feedback_file"), function(req, res, next ){
 					}
 					else {
 						console.log(record);
-						res.render('feedback', { uploaded : true } );
+						res.render('feedback', {
+							fedBack : true,
+							time: dateFormat(now, "dddd, h:MMTT")} );
 					}
 				})
 		});

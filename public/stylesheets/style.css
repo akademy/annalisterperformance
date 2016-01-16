@@ -90,6 +90,16 @@ body {
     font-size: 20px;
 }
 
+#timeFrame .highlight {
+    background-color: rgb(0, 129, 106);
+    color: white;
+    border-radius: 3px;
+    padding: 3px 5px;
+}
+#timeFrame .highlight a {
+    color: white;
+}
+
 .featuring p {
     margin-bottom: 0;
 }
@@ -179,9 +189,26 @@ body {
     color:white;
 }
 
-.smalltext{
+.smalltext {
     padding-top: 5px;
     font-size: 16px;
+}
+
+#feedback form textarea {
+    width: 90%;
+}
+#feedback form input {
+    width: 90%;
+}
+
+#feedback form input[type=submit] {
+    width: auto;
+}
+
+#feedback .highlight {
+    background-color: rgb(0, 129, 106);
+    padding: 10px;
+    color: white;
 }
 
 @media only screen and (min-width: 480px) and (max-width:767px) {
